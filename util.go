@@ -21,7 +21,7 @@ func getEnvOrDefaultBool(key string, defaultValue bool) bool {
 		return defaultValue
 	}
 	if value == "true" || value == "1" {
-		return false
+		return true
 	}
 
 	return false
