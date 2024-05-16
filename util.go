@@ -40,10 +40,14 @@ func getEnvOrDefaultDuration(key string, defaultValue time.Duration) time.Durati
 	return d
 }
 
-func matchWildcard(str string, pattern string) (bool, error) {
+func matchPattern(str string, pattern string) (bool, error) {
 	if strings.Contains(str, pattern) {
 		return true, nil
 	}
 
-	return regexp.MatchString(pattern, str)
+	if r, err := regexp.Compile(pattern); err != nil {
+		return false, err
+	} else {
+		return r.MatchString(str), nil
+	}
 }

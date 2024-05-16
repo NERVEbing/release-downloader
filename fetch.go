@@ -39,7 +39,7 @@ func fetchReleases(ctx context.Context, client *github.Client, repository string
 		}
 
 		if len(tag) > 0 {
-			match, err := matchWildcard(release.GetTagName(), tag)
+			match, err := matchPattern(release.GetTagName(), tag)
 			if err != nil {
 				return nil, err
 			}
@@ -64,7 +64,7 @@ func fetchAssets(releases []*github.RepositoryRelease, filename string) ([]*gith
 	for _, release := range releases {
 		for _, asset := range release.Assets {
 			if len(filename) > 0 {
-				match, err := matchWildcard(asset.GetName(), filename)
+				match, err := matchPattern(asset.GetName(), filename)
 				if err != nil {
 					return nil, err
 				}
