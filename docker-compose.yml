@@ -1,0 +1,18 @@
+services:
+  release-downloader:
+    image: ghcr.io/nervebing/release-downloader:latest
+    container_name: release-downloader
+    restart: always
+#    user: 1000:1000
+    environment:
+      ENV_REPOSITORY: fastfetch-cli/fastfetch # repository {owner}/{repo}
+      ENV_TAG: 2.11.* # optional, eg: regexp ".*.18.*", default: ""
+      ENV_FILE: .*linux.*amd64.*. # optional, eg: regexp ".*linux-arm64.*.gz", default: ""
+      ENV_LATEST: true # optional, download target as latest release, default: false
+      ENV_PRERELEASE: true # optional, download target as prerelease, default: false
+      ENV_TOKEN: ${GITHUB_TOKEN} # optional, github personal access token, default: ""
+      ENV_PATH: /mnt/release-downloader # optional, download path, default: "./tmp"
+      ENV_INTERVAL: 24h # optional, download task interval, default: 1h
+      ENV_NOW: # optional, immediately run, default: false
+    volumes:
+      - ./data:/mnt/release-downloader

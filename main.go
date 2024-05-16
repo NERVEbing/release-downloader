@@ -32,10 +32,10 @@ func main() {
 	flagTag := flag.String("tag", "", "download assets from a specific tag (eg: regexp '.*.18.*')")
 	flagFilename := flag.String("filename", "", "download assets from a specific filename, excluding tarball or zipball (eg: regexp '.*linux-arm64.*.gz')")
 	flagLatest := flag.Bool("latest", false, "download target as latest release")
-	flagPrerelease := flag.Bool("prerelease", false, "download target as prerelease release")
+	flagPrerelease := flag.Bool("prerelease", false, "download target as prerelease")
 	flagToken := flag.String("token", "", "github personal access token")
 	flagPath := flag.String("path", "./tmp", "download path")
-	flagInterval := flag.Duration("interval", DefaultInterval, "download interval")
+	flagInterval := flag.Duration("interval", DefaultInterval, "download task interval")
 	flogNow := flag.Bool("now", false, "immediately run")
 	flag.Parse()
 
