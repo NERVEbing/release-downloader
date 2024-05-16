@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"regexp"
+	"strings"
 	"time"
 )
 
@@ -44,9 +45,17 @@ func matchPattern(str string, pattern string) (bool, error) {
 		return true, nil
 	}
 
-	if r, err := regexp.Compile(pattern); err != nil {
+	r, err := regexp.Compile(pattern)
+	if err != nil {
 		return false, err
-	} else {
-		return r.MatchString(str), nil
 	}
+
+	match := r.MatchString(str)
+	if match {
+		if strings.Contains(str, pattern) {
+			match = false
+		}
+	}
+
+	return match, nil
 }
