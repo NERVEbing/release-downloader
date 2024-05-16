@@ -79,8 +79,8 @@ func fetchAssets(releases []*github.RepositoryRelease, filename string) ([]*gith
 	return a, nil
 }
 
-func fetchFiles(m map[string]string, path string) error {
-	if len(m) == 0 {
+func fetchFiles(assets []*github.ReleaseAsset, path string) error {
+	if len(assets) == 0 {
 		return nil
 	}
 
@@ -93,10 +93,10 @@ func fetchFiles(m map[string]string, path string) error {
 		}
 	}
 
-	for n, u := range m {
-		if err := download(n, u, path); err != nil {
+	for _, asset := range assets {
+		if err := download(asset.GetName(), asset.GetBrowserDownloadURL(), path); err != nil {
 			if os.IsExist(err) {
-				log.Printf("file %s already exists, skip", filepath.Join(path, n))
+				log.Printf("file %s already exists, skip", filepath.Join(path, asset.GetName()))
 				continue
 			}
 			return err
@@ -104,12 +104,11 @@ func fetchFiles(m map[string]string, path string) error {
 	}
 
 	return nil
-
 }
 
-func download(n string, u string, path string) error {
-	p := filepath.Join(path, n)
-	f, err := os.Stat(p)
+func download(assetName string, assetUrl string, path string) error {
+	assetPath := filepath.Join(path, assetName)
+	f, err := os.Stat(assetPath)
 	if err != nil {
 		if !os.IsNotExist(err) {
 			return err
@@ -118,12 +117,12 @@ func download(n string, u string, path string) error {
 		return os.ErrExist
 	}
 	if f != nil && f.Size() < 1024 {
-		if err = os.Remove(p); err != nil {
+		if err = os.Remove(assetPath); err != nil {
 			return err
 		}
 	}
 
-	resp, err := http.Get(u)
+	resp, err := http.Get(assetUrl)
 	if err != nil {
 		return err
 	}
@@ -133,7 +132,7 @@ func download(n string, u string, path string) error {
 		return errors.New(fmt.Sprintf("download status code %d", resp.StatusCode))
 	}
 
-	file, err := os.Create(p)
+	file, err := os.Create(assetPath)
 	if err != nil {
 		return err
 	}
@@ -143,7 +142,7 @@ func download(n string, u string, path string) error {
 		return err
 	}
 
-	log.Printf("downloaded %s to %s success", n, p)
+	log.Printf("downloaded %s to %s success", assetName, assetPath)
 
 	return nil
 }

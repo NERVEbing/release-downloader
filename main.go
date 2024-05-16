@@ -90,14 +90,7 @@ func run(ctx context.Context, client *github.Client, repository string, tag stri
 		log.Fatalf("failed to fetch assets: %v", err)
 	}
 
-	m := make(map[string]string)
-	for _, asset := range assets {
-		if _, exist := m[asset.GetName()]; !exist {
-			m[asset.GetName()] = asset.GetBrowserDownloadURL()
-		}
-	}
-
-	if err = fetchFiles(m, path); err != nil {
+	if err = fetchFiles(assets, path); err != nil {
 		log.Fatalf("failed to fetch files: %v", err)
 	}
 
