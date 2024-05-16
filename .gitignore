@@ -27,3 +27,6 @@ go.work
 
 # Temp
 tmp/
+
+# Bin
+release-downloader
