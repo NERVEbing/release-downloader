@@ -3,7 +3,6 @@ package main
 import (
 	"os"
 	"regexp"
-	"strings"
 	"time"
 )
 
@@ -41,7 +40,7 @@ func getEnvOrDefaultDuration(key string, defaultValue time.Duration) time.Durati
 }
 
 func matchPattern(str string, pattern string) (bool, error) {
-	if strings.Contains(str, pattern) {
+	if str == pattern {
 		return true, nil
 	}
 
