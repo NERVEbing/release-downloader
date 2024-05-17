@@ -5,14 +5,14 @@ services:
     restart: always
 #    user: 1000:1000
     environment:
-      ENV_REPOSITORY: fastfetch-cli/fastfetch # github repository, {owner}/{repo}
-      ENV_TAG: 2.11.* # optional, default: '', download assets from a specific tag (eg: regexp '.*.18.*')
-      ENV_FILE: .*linux.*amd64.*. # optional, default: '', download assets from a specific filename, excluding tarball or zipball (eg: regexp '.*linux-arm64.*.gz')
-      ENV_LATEST: true # optional, default: false, download target as latest release
-      ENV_PRERELEASE: true # optional, default: false, download target as prerelease
-      ENV_TOKEN: ${GITHUB_TOKEN} # optional, default: '', github personal access token
-      ENV_PATH: /mnt/release-downloader # optional, default: './tmp', download path
-      ENV_INTERVAL: 24h # optional, default: 1h, download task interval
-      ENV_NOW: # optional, default: false, immediately run
+      REPOSITORY: fastfetch-cli/fastfetch # github repository, {owner}/{repo}
+      TAG: 2.11.* # optional, default: '', download assets from a specific tag (eg: regexp '.*.18.*')
+      FILENAME: .*linux.*amd64.*. # optional, default: '', download assets from a specific filename, excluding tarball or zipball (eg: regexp '.*linux-arm64.*.gz')
+      LATEST: true # optional, default: false, download target as latest release
+      PRERELEASE: true # optional, default: false, download target as prerelease
+      TOKEN: ${GITHUB_TOKEN} # optional, default: '', github personal access token
+      PATH: /mnt/release-downloader # optional, default: './tmp', download path
+      INTERVAL: 24h # optional, default: 1h, download task interval
+      NOW: # optional, default: false, immediately run
     volumes:
       - ./data:/mnt/release-downloader

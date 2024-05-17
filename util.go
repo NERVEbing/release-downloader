@@ -3,41 +3,34 @@ package main
 import (
 	"os"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
 
-func getEnvOrDefault(key string, defaultValue string) string {
-	value := os.Getenv(key)
-	if value == "" {
-		return defaultValue
-	}
-	return value
-}
-
-func getEnvOrDefaultBool(key string, defaultValue bool) bool {
-	value := os.Getenv(key)
-	if value == "" {
-		return defaultValue
-	}
-	if value == "true" || value == "1" {
-		return true
-	}
-
-	return false
-}
-
-func getEnvOrDefaultDuration(key string, defaultValue time.Duration) time.Duration {
-	value := os.Getenv(key)
-	if value == "" {
-		return defaultValue
-	}
-	d, err := time.ParseDuration(value)
-	if err != nil {
-		return defaultValue
+func envOrFlag[T any](envKey string, flagValue T) T {
+	if value, exist := os.LookupEnv(envKey); exist {
+		switch any(flagValue).(type) {
+		case string:
+			return any(value).(T)
+		case bool:
+			boolValue, err := strconv.ParseBool(value)
+			if err != nil {
+				panic(err)
+			}
+			return any(boolValue).(T)
+		case time.Duration:
+			durationValue, err := time.ParseDuration(value)
+			if err != nil {
+				panic(err)
+			}
+			return any(durationValue).(T)
+		default:
+			panic("unsupported conversion type")
+		}
 	}
 
-	return d
+	return flagValue
 }
 
 func matchPattern(str string, pattern string) (bool, error) {
@@ -58,4 +51,16 @@ func matchPattern(str string, pattern string) (bool, error) {
 	}
 
 	return match, nil
+}
+
+func isExist(filepath string) (bool, error) {
+	_, err := os.Stat(filepath)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false, nil
+		}
+		return false, err
+	}
+
+	return true, nil
 }
