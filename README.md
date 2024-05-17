@@ -30,7 +30,11 @@ See [docker-compose.yml](docker-compose.yml)
 #### Build from source
 
 ```shell
-go build
+git clone https://github.com/NERVEbing/release-downloader.git
+
+cd release-downloader
+
+go build -o release-downloader .
 
 ./release-downloader \
     -repository "fastfetch-cli/fastfetch" \
