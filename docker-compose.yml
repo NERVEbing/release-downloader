@@ -3,8 +3,10 @@ services:
     image: ghcr.io/nervebing/release-downloader:latest
     container_name: release-downloader
     restart: always
+#    root: 1000:1000
     environment:
-      RD_REPOSITORY: fastfetch-cli/fastfetch
+      TZ: Europe/London # default: Asia/Shanghai
+#      RD_REPOSITORY: fastfetch-cli/fastfetch
 #      RD_TAG: 2.11.*
 #      RD_FILENAME: .*linux.*amd64.*.
 #      RD_LATEST: true

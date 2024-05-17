@@ -25,6 +25,8 @@ wget https://raw.githubusercontent.com/NERVEbing/release-downloader/master/docke
 docker compose up -d
 ```
 
+See [docker-compose.yml](docker-compose.yml)
+
 #### Build from source
 
 ```shell
