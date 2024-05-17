@@ -25,10 +25,6 @@ wget https://raw.githubusercontent.com/NERVEbing/release-downloader/master/docke
 docker compose up -d
 ```
 
-##### Environment
-
-See [docker-compose.yml](docker-compose.yml)
-
 #### Build from source
 
 ```shell
@@ -42,46 +38,24 @@ go build
     -path ./tmp \
     -interval 1h \
     -now
-
-2024/05/16 15:26:27 repository: fastfetch-cli/fastfetch
-2024/05/16 15:26:27 tag: 
-2024/05/16 15:26:27 filename: .*linux.*amd64.*.zip
-2024/05/16 15:26:27 latest: true
-2024/05/16 15:26:27 prerelease: true
-2024/05/16 15:26:27 token:
-2024/05/16 15:26:27 path: ./tmp
-2024/05/16 15:26:27 interval: 1h0m0s
-2024/05/16 15:26:27 now: true
-2024/05/16 15:26:27 task commencing
-2024/05/16 15:26:28 downloaded fastfetch-linux-amd64.zip to tmp/fastfetch-linux-amd64.zip success
-2024/05/16 15:26:28 task completed, duration: 3.270727875s
 ```
 
-##### Command line arguments
+#### Environment & Command line arguments
 
-```shell
-./release-downloader -h
-Usage of ./release-downloader:
-  -filename string
-        optional, default: '', download assets from a specific filename, excluding tarball or zipball (eg: regexp '.*linux-arm64.*.gz')
-  -interval duration
-        optional, default: 1h, download task interval (default 1h0m0s)
-  -latest
-        optional, default: false, download target as latest release
-  -now
-        optional, default: false, immediately run
-  -path string
-        optional, default: './tmp', download path (default "./tmp")
-  -prerelease
-        optional, default: false, download target as prerelease
-  -repository string
-        github repository, {owner}/{repo}
-  -tag string
-        optional, default: '', download assets from a specific tag (eg: regexp '.*.18.*')
-  -token string
-        optional, default: '', github personal access token
-
-```
+| Command Line Flag | Environment Variable | Description                                                                                                        | Default Value |
+|-------------------|----------------------|--------------------------------------------------------------------------------------------------------------------|---------------|
+| `-repository`     | `RD_REPOSITORY`      | GitHub repository in {owner}/{repo} format.                                                                        | ""            |
+| `-tag`            | `RD_TAG`             | Optional. Download assets from a specific tag (e.g., regexp '.*.18.*').                                            | ""            |
+| `-filename`       | `RD_FILENAME`        | Optional. Download assets matching a specific filename, excluding tarball or zipball (e.g., '.*linux-arm64.*.gz'). | ""            |
+| `-latest`         | `RD_LATEST`          | Optional. Download the latest release.                                                                             | `false`       |
+| `-prerelease`     | `RD_PRERELEASE`      | Optional. Download prerelease versions.                                                                            | `false`       |
+| `-token`          | `RD_TOKEN`           | Optional. GitHub personal access token.                                                                            | ""            |
+| `-path`           | `RD_PATH`            | Optional. Download path.                                                                                           | "./tmp"       |
+| `-interval`       | `RD_INTERVAL`        | Optional. Interval between download tasks.                                                                         | `1h`          |
+| `-now`            | `RD_NOW`             | Optional. Run the task immediately.                                                                                | `false`       |
+| `-timeout`        | `RD_TIMEOUT`         | Optional. HTTP client timeout duration.                                                                            | `30s`         |
+| `-asset_tag`      | `RD_ASSET_TAG`       | Optional. Rename the file using the asset tag (e.g., xxx.zip -> xxx-v0.5.1.zip).                                   | `false`       |
+| `-asset_date`     | `RD_ASSET_DATE`      | Optional. Rename the file using the asset date (e.g., xxx.zip -> xxx-202401231619.zip).                            | `false`       |
 
 ### License
 

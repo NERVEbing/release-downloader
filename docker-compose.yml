@@ -3,19 +3,18 @@ services:
     image: ghcr.io/nervebing/release-downloader:latest
     container_name: release-downloader
     restart: always
-#    user: 1000:1000
     environment:
-      RD_REPOSITORY: fastfetch-cli/fastfetch # github repository, {owner}/{repo}
-      RD_TAG: 2.11.* # optional, default: '', download assets from a specific tag (eg: regexp '.*.18.*')
-      RD_FILENAME: .*linux.*amd64.*. # optional, default: '', download assets from a specific filename, excluding tarball or zipball (eg: regexp '.*linux-arm64.*.gz')
-      RD_LATEST: true # optional, default: false, download target as latest release
-      RD_PRERELEASE: true # optional, default: false, download target as prerelease
-      RD_TOKEN: ${GITHUB_TOKEN} # optional, default: '', github personal access token
-      RD_PATH: /mnt/release-downloader # optional, default: './tmp', download path
-      RD_INTERVAL: 24h # optional, default: 1h, download task interval
-      RD_NOW: true # optional, default: false, immediately run
-      RD_TIMEOUT: 1m # optional, default: 30s, http client timeout
-      RD_ASSET_TAG: true # optional, default: false, rename the file using the asses tag (eg: xxx.zip -> xxx-v0.5.1.zip)
-      RD_ASSET_DATE: true # optional, default: false, rename the file using the asses date (eg: xxx.zip -> xxx-202401231619.zip)
+      RD_REPOSITORY: fastfetch-cli/fastfetch
+#      RD_TAG: 2.11.*
+#      RD_FILENAME: .*linux.*amd64.*.
+#      RD_LATEST: true
+#      RD_PRERELEASE: true
+#      RD_TOKEN: ${GITHUB_TOKEN}
+#      RD_PATH: /mnt/release-downloader
+#      RD_INTERVAL: 24h
+#      RD_NOW: true
+#      RD_TIMEOUT: 1m
+#      RD_ASSET_TAG: true
+#      RD_ASSET_DATE: true
     volumes:
       - ./data:/mnt/release-downloader
