@@ -54,11 +54,11 @@ func fetchReleases(ctx context.Context) ([]*github.RepositoryRelease, error) {
 	return r, nil
 }
 
-func fetchAssets(releases []*github.RepositoryRelease) ([]*github.ReleaseAsset, error) {
-	var a []*github.ReleaseAsset
+func fetchAssets(releases []*github.RepositoryRelease) (map[string][]*github.ReleaseAsset, error) {
+	m := make(map[string][]*github.ReleaseAsset)
 
 	if len(releases) == 0 {
-		return a, nil
+		return m, nil
 	}
 
 	for _, release := range releases {
@@ -72,15 +72,20 @@ func fetchAssets(releases []*github.RepositoryRelease) ([]*github.ReleaseAsset, 
 					continue
 				}
 			}
-			a = append(a, asset)
+			_, exist := m[release.GetTagName()]
+			if exist {
+				m[release.GetTagName()] = append(m[release.GetTagName()], asset)
+			} else {
+				m[release.GetTagName()] = []*github.ReleaseAsset{asset}
+			}
 		}
 	}
 
-	return a, nil
+	return m, nil
 }
 
-func fetchFiles(assets []*github.ReleaseAsset) error {
-	if len(assets) == 0 {
+func fetchFiles(m map[string][]*github.ReleaseAsset) error {
+	if len(m) == 0 {
 		return nil
 	}
 
@@ -93,22 +98,34 @@ func fetchFiles(assets []*github.ReleaseAsset) error {
 		}
 	}
 
-	for _, asset := range assets {
-		if err := download(asset.GetName(), asset.GetBrowserDownloadURL(), asset.GetID(), c.path); err != nil {
-			if os.IsExist(err) {
-				log.Printf("file %s already exists, skip", filepath.Join(c.path, asset.GetName()))
-				continue
+	for tag := range m {
+		for _, asset := range m[tag] {
+			assetName := asset.GetName()
+			assetURL := asset.GetBrowserDownloadURL()
+			assetTag := tag
+			assetDate := asset.UpdatedAt.Format("200601021504")
+
+			if c.assetTag {
+				assetName = rename(assetName, assetTag)
 			}
-			return err
+			if c.assetDate {
+				assetName = rename(assetName, assetDate)
+			}
+
+			if err := download(assetName, assetURL, filepath.Join(c.path, assetName)); err != nil {
+				if os.IsExist(err) {
+					log.Printf("file %s already exists, skip", filepath.Join(c.path, assetName))
+					continue
+				}
+				return err
+			}
 		}
 	}
 
 	return nil
 }
 
-func download(assetName string, assetURL string, assetID int64, path string) error {
-	assetPath := filepath.Join(path, assetName)
-
+func download(assetName string, assetURL string, assetPath string) error {
 	exist, err := isExist(assetPath)
 	if err != nil {
 		return err

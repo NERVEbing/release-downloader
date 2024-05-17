@@ -5,14 +5,17 @@ services:
     restart: always
 #    user: 1000:1000
     environment:
-      REPOSITORY: fastfetch-cli/fastfetch # github repository, {owner}/{repo}
-      TAG: 2.11.* # optional, default: '', download assets from a specific tag (eg: regexp '.*.18.*')
-      FILENAME: .*linux.*amd64.*. # optional, default: '', download assets from a specific filename, excluding tarball or zipball (eg: regexp '.*linux-arm64.*.gz')
-      LATEST: true # optional, default: false, download target as latest release
-      PRERELEASE: true # optional, default: false, download target as prerelease
-      TOKEN: ${GITHUB_TOKEN} # optional, default: '', github personal access token
-      PATH: /mnt/release-downloader # optional, default: './tmp', download path
-      INTERVAL: 24h # optional, default: 1h, download task interval
-      NOW: # optional, default: false, immediately run
+      RD_REPOSITORY: fastfetch-cli/fastfetch # github repository, {owner}/{repo}
+      RD_TAG: 2.11.* # optional, default: '', download assets from a specific tag (eg: regexp '.*.18.*')
+      RD_FILENAME: .*linux.*amd64.*. # optional, default: '', download assets from a specific filename, excluding tarball or zipball (eg: regexp '.*linux-arm64.*.gz')
+      RD_LATEST: true # optional, default: false, download target as latest release
+      RD_PRERELEASE: true # optional, default: false, download target as prerelease
+      RD_TOKEN: ${GITHUB_TOKEN} # optional, default: '', github personal access token
+      RD_PATH: /mnt/release-downloader # optional, default: './tmp', download path
+      RD_INTERVAL: 24h # optional, default: 1h, download task interval
+      RD_NOW: true # optional, default: false, immediately run
+      RD_TIMEOUT: 1m # optional, default: 30s, http client timeout
+      RD_ASSET_TAG: true # optional, default: false, rename the file using the asses tag (eg: xxx.zip -> xxx-v0.5.1.zip)
+      RD_ASSET_DATE: true # optional, default: false, rename the file using the asses date (eg: xxx.zip -> xxx-202401231619.zip)
     volumes:
       - ./data:/mnt/release-downloader
