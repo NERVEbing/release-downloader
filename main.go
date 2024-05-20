@@ -15,34 +15,20 @@ const (
 	DefaultInterval = time.Hour
 )
 
-var (
-	repositoryFlag = flag.String("repository", "", "GitHub repository in {owner}/{repo} format.")
-	tagFlag        = flag.String("tag", "", "Optional. Download assets from a specific tag (e.g., regexp '.*.18.*').")
-	filenameFlag   = flag.String("filename", "", "Optional. Download assets matching a specific filename, excluding tarball or zipball (e.g., '.*linux-arm64.*.gz').")
-	latestFlag     = flag.Bool("latest", false, "Optional. Download the latest release.")
-	prereleaseFlag = flag.Bool("prerelease", false, "Optional. Download prerelease versions.")
-	tokenFlag      = flag.String("token", "", "Optional. GitHub personal access token.")
-	pathFlag       = flag.String("path", "./tmp", "Optional. Download path.")
-	intervalFlag   = flag.Duration("interval", DefaultInterval, "Optional. Interval between download tasks.")
-	nowFlag        = flag.Bool("now", false, "Optional. Run the task immediately.")
-	timeoutFlag    = flag.Duration("timeout", DefaultTimeout, "Optional. HTTP client timeout duration.")
-	assetTagFlag   = flag.Bool("asset_tag", false, "Optional. Rename the file using the asset tag (e.g., xxx.zip -> xxx-v0.5.1.zip).")
-	assetDateFlag  = flag.Bool("asset_date", false, "Optional. Rename the file using the asset date (e.g., xxx.zip -> xxx-202401231619.zip).")
-)
-
 type config struct {
-	repository string
-	tag        string
-	filename   string
-	latest     bool
-	prerelease bool
-	token      string
-	path       string
-	interval   time.Duration
-	now        bool
-	timeout    time.Duration
-	assetTag   bool
-	assetDate  bool
+	repository   string
+	tag          string
+	filename     string
+	latest       bool
+	prerelease   bool
+	token        string
+	path         string
+	interval     time.Duration
+	now          bool
+	timeout      time.Duration
+	assetTag     bool
+	assetDate    bool
+	assetExtract bool
 
 	httpClient   *http.Client
 	githubClient *github.Client
@@ -51,6 +37,19 @@ type config struct {
 var c *config
 
 func init() {
+	repositoryFlag := flag.String("repository", "", "GitHub repository in {owner}/{repo} format.")
+	tagFlag := flag.String("tag", "", "Optional. Download assets from a specific tag (e.g., regexp '.*.18.*').")
+	filenameFlag := flag.String("filename", "", "Optional. Download assets matching a specific filename, excluding tarball or zipball (e.g., '.*linux-arm64.*.gz').")
+	latestFlag := flag.Bool("latest", false, "Optional. Download the latest release.")
+	prereleaseFlag := flag.Bool("prerelease", false, "Optional. Download prerelease versions.")
+	tokenFlag := flag.String("token", "", "Optional. GitHub personal access token.")
+	pathFlag := flag.String("path", "./tmp", "Optional. Download path.")
+	intervalFlag := flag.Duration("interval", DefaultInterval, "Optional. Interval between download tasks.")
+	nowFlag := flag.Bool("now", false, "Optional. Run the task immediately.")
+	timeoutFlag := flag.Duration("timeout", DefaultTimeout, "Optional. HTTP client timeout duration.")
+	assetTagFlag := flag.Bool("asset_tag", false, "Optional. Rename the file using the asset tag (e.g., xxx.zip -> xxx-v0.5.1.zip).")
+	assetDateFlag := flag.Bool("asset_date", false, "Optional. Rename the file using the asset date (e.g., xxx.zip -> xxx-202401231619.zip).")
+	assetExtractFlag := flag.Bool("asset_extract", false, "Optional. Automatically extract files (supports zip, gz, and tar.gz).")
 	flag.Parse()
 
 	repository := envOrFlag("RD_REPOSITORY", *repositoryFlag)
@@ -65,6 +64,7 @@ func init() {
 	timeout := envOrFlag("RD_TIMEOUT", *timeoutFlag)
 	assetTag := envOrFlag("RD_ASSET_TAG", *assetTagFlag)
 	assetDate := envOrFlag("RD_ASSET_DATE", *assetDateFlag)
+	assetExtract := envOrFlag("RD_ASSET_EXTRACT", *assetExtractFlag)
 
 	httpClient := &http.Client{}
 	if timeout.Milliseconds() > 0 {
@@ -76,18 +76,19 @@ func init() {
 	}
 
 	c = &config{
-		repository: repository,
-		tag:        tag,
-		filename:   filename,
-		latest:     latest,
-		prerelease: prerelease,
-		token:      token,
-		path:       path,
-		interval:   interval,
-		now:        now,
-		timeout:    timeout,
-		assetTag:   assetTag,
-		assetDate:  assetDate,
+		repository:   repository,
+		tag:          tag,
+		filename:     filename,
+		latest:       latest,
+		prerelease:   prerelease,
+		token:        token,
+		path:         path,
+		interval:     interval,
+		now:          now,
+		timeout:      timeout,
+		assetTag:     assetTag,
+		assetDate:    assetDate,
+		assetExtract: assetExtract,
 
 		httpClient:   httpClient,
 		githubClient: githubClient,
@@ -107,6 +108,7 @@ func main() {
 	log.Printf("timeout: %s", c.timeout.String())
 	log.Printf("asset_tag: %t", c.assetTag)
 	log.Printf("asset_date: %t", c.assetDate)
+	log.Printf("asset_extract: %t", c.assetExtract)
 
 	ctx := context.Background()
 	ticker := time.NewTicker(c.interval)

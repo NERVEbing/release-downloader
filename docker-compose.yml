@@ -18,5 +18,6 @@ services:
 #      RD_TIMEOUT: 1m
 #      RD_ASSET_TAG: true
 #      RD_ASSET_DATE: true
+#      RD_ASSET_EXTRACT: true
     volumes:
       - ./data:/mnt/release-downloader

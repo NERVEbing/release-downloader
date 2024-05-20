@@ -4,9 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
-	"log"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -101,60 +98,26 @@ func fetchFiles(m map[string][]*github.ReleaseAsset) error {
 	for tag := range m {
 		for _, asset := range m[tag] {
 			assetName := asset.GetName()
-			assetURL := asset.GetBrowserDownloadURL()
-			assetTag := tag
-			assetDate := asset.UpdatedAt.Format("200601021504")
-
 			if c.assetTag {
-				assetName = rename(assetName, assetTag)
+				assetName = fileRename(assetName, tag)
 			}
 			if c.assetDate {
-				assetName = rename(assetName, assetDate)
+				assetName = fileRename(assetName, asset.UpdatedAt.Format("200601021504"))
+			}
+			assetURL := asset.GetBrowserDownloadURL()
+			assetPath := filepath.Join(c.path, assetName)
+
+			if err := download(assetURL, assetPath); err != nil {
+				return err
 			}
 
-			if err := download(assetName, assetURL, filepath.Join(c.path, assetName)); err != nil {
-				if os.IsExist(err) {
-					log.Printf("file %s already exists, skip", filepath.Join(c.path, assetName))
-					continue
+			if c.assetExtract {
+				if err := extract(assetPath); err != nil {
+					return err
 				}
-				return err
 			}
 		}
 	}
-
-	return nil
-}
-
-func download(assetName string, assetURL string, assetPath string) error {
-	exist, err := isExist(assetPath)
-	if err != nil {
-		return err
-	}
-	if exist {
-		return os.ErrExist
-	}
-
-	resp, err := http.Get(assetURL)
-	if err != nil {
-		return err
-	}
-	defer func() { _ = resp.Body.Close() }()
-
-	if resp.StatusCode != http.StatusOK {
-		return errors.New(fmt.Sprintf("download status code %d", resp.StatusCode))
-	}
-
-	file, err := os.Create(assetPath)
-	if err != nil {
-		return err
-	}
-	defer func() { _ = file.Close() }()
-
-	if _, err = io.Copy(file, resp.Body); err != nil {
-		return err
-	}
-
-	log.Printf("downloaded %s to %s success", assetName, assetPath)
 
 	return nil
 }

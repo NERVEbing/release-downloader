@@ -12,6 +12,7 @@ latest software release versions.
 - Supports matching based on release or tag names.
 - Allows matching based on file names.
 - Provides custom download paths.
+- Automatically extracts files (supports zip, gz, and tar.gz).
 - Developed in Go, offering simplicity and ease of use.
 
 ### Usage
@@ -58,6 +59,7 @@ go build -o release-downloader .
 | `-timeout`        | `RD_TIMEOUT`         | Optional. HTTP client timeout duration.                                                                            | `30s`         |
 | `-asset_tag`      | `RD_ASSET_TAG`       | Optional. Rename the file using the asset tag (e.g., xxx.zip -> xxx-v0.5.1.zip).                                   | `false`       |
 | `-asset_date`     | `RD_ASSET_DATE`      | Optional. Rename the file using the asset date (e.g., xxx.zip -> xxx-202401231619.zip).                            | `false`       |
+| `-asset_extract`  | `RD_ASSET_EXTRACT`   | Optional. Automatically extract files (supports zip, gz, and tar.gz).                                              | `false`       |
 
 ### License
 

@@ -2,7 +2,6 @@ package main
 
 import (
 	"os"
-	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -52,26 +51,4 @@ func matchPattern(str string, pattern string) (bool, error) {
 	}
 
 	return match, nil
-}
-
-func isExist(filepath string) (bool, error) {
-	_, err := os.Stat(filepath)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return false, nil
-		}
-		return false, err
-	}
-
-	return true, nil
-}
-
-func rename(filename string, opt ...string) string {
-	ext := filepath.Ext(filename)
-	filename = strings.TrimSuffix(filename, ext)
-	for _, o := range opt {
-		filename += "-" + o
-	}
-
-	return filename + ext
 }
