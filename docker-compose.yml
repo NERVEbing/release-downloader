@@ -6,9 +6,9 @@ services:
 #    root: 1000:1000
     environment:
       TZ: Europe/London # default: Asia/Shanghai
-#      RD_REPOSITORY: fastfetch-cli/fastfetch
-#      RD_TAG: 2.11.*
-#      RD_FILENAME: .*linux.*amd64.*.
+#      RD_REPOSITORY: containers/podman
+#      RD_TAG: .*5.0.*
+#      RD_FILENAME: .*linux_amd64.tar.gz$
 #      RD_LATEST: true
 #      RD_PRERELEASE: true
 #      RD_TOKEN: ${GITHUB_TOKEN}

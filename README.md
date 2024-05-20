@@ -1,23 +1,32 @@
 ## release-downloader
 
+<p align="left">
+    <img src="https://custom-icon-badges.herokuapp.com/github/last-commit/NERVEbing/release-downloader?logo=history&logoColor=white" alt="last commit"/>
+    <img src="https://github.com/NERVEbing/release-downloader/actions/workflows/docker.yml/badge.svg" alt="Build Docker Images"/>
+    <img src="https://goreportcard.com/badge/github.com/NERVEbing/release-downloader" alt="Go Report Card"/>
+    <img src="https://custom-icon-badges.herokuapp.com/github/license/NERVEbing/release-downloader?logo=law&color=blue" alt="License"/>
+</p>
+
+[English](README.md) | [简体中文](README.zh.md)
+
 ### Overview
 
-release-downloader is an application designed to periodically monitor specified GitHub repositories for releases and
-download corresponding files based on defined criteria. It is primarily used for automating the process of fetching the
-latest software release versions.
+release-downloader is an elegantly practical application designed to periodically monitor specified GitHub repositories
+for releases and download corresponding files according to predefined criteria. It is primarily used to automate the
+acquisition of the latest software release versions.
 
 ### Features
 
-- Periodically monitors GitHub repositories for releases.
+- Periodically monitors GitHub repositories for new releases.
 - Supports matching based on release or tag names.
-- Allows matching based on file names.
-- Provides custom download paths.
+- Allows file name-based matching.
+- Offers custom download paths.
 - Automatically extracts files (supports zip, gz, and tar.gz).
-- Developed in Go, offering simplicity and ease of use.
+- Developed in Go, ensuring simplicity and ease of use.
 
 ### Usage
 
-#### Docker Compose(Recommended)
+#### Docker Compose (Recommended)
 
 ```shell
 mkdir release-downloader && cd release-downloader
@@ -34,8 +43,8 @@ See [docker-compose.yml](docker-compose.yml)
 git clone https://github.com/NERVEbing/release-downloader.git && cd release-downloader
 go build -o release-downloader .
 ./release-downloader \
-    -repository "fastfetch-cli/fastfetch" \
-    -filename ".*linux.*amd64.*.zip" \
+    -repository "containers/podman" \
+    -filename ".*linux_amd64.tar.gz$" \
     -latest \
     -prerelease \
     -path ./tmp \

@@ -9,7 +9,7 @@ ENV GO111MODULE=on \
 
 RUN mkdir -p ./bin && go build -o ./bin ./...
 
-FROM alpine:latest
+FROM alpine:3.19.1
 
 RUN apk update && apk --no-cache add tzdata
 
