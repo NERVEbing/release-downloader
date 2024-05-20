@@ -1,11 +1,9 @@
 ## release-downloader
 
-<p align="left">
-    <img src="https://custom-icon-badges.herokuapp.com/github/last-commit/NERVEbing/release-downloader?logo=history&logoColor=white" alt="last commit"/>
-    <img src="https://github.com/NERVEbing/release-downloader/actions/workflows/docker.yml/badge.svg" alt="Build Docker Images"/>
-    <img src="https://goreportcard.com/badge/github.com/NERVEbing/release-downloader" alt="Go Report Card"/>
-    <img src="https://custom-icon-badges.herokuapp.com/github/license/NERVEbing/release-downloader?logo=law&color=blue" alt="License"/>
-</p>
+![Last Commit](https://custom-icon-badges.herokuapp.com/github/last-commit/NERVEbing/release-downloader?logo=history&logoColor=white)
+![Build Docker Images](https://github.com/NERVEbing/release-downloader/actions/workflows/docker.yml/badge.svg)
+![Go Report Card](https://goreportcard.com/badge/github.com/NERVEbing/release-downloader)
+![License](https://custom-icon-badges.herokuapp.com/github/license/NERVEbing/release-downloader?logo=law&color=blue)
 
 [English](README.md) | [简体中文](README.zh.md)
 
