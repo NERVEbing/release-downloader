@@ -5,6 +5,7 @@ import (
 	"archive/zip"
 	"compress/gzip"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -98,19 +99,22 @@ func extractTarGz(path string, target string) error {
 		if err != nil {
 			return err
 		}
-		targetPath := filepath.Clean(filepath.Join(target, header.Name))
 
+		outPath := filepath.Join(target, header.Name)
 		switch header.Typeflag {
 		case tar.TypeDir:
-			if err = os.MkdirAll(targetPath, os.ModePerm); err != nil {
+			if err = os.MkdirAll(outPath, os.ModePerm); err != nil {
 				return err
 			}
 		case tar.TypeReg:
-			if err := fileWrite(targetPath, tarReader); err != nil {
+			if err = os.MkdirAll(filepath.Dir(outPath), os.ModePerm); err != nil {
+				return err
+			}
+			if err = fileWrite(outPath, tarReader); err != nil {
 				return err
 			}
 		default:
-			return errors.New("unknown tar header type")
+			return errors.New(fmt.Sprintf("unsupported file type %v", header.Typeflag))
 		}
 	}
 

@@ -27,6 +27,7 @@ go.work
 
 # Temp
 tmp/
+.DS_Store
 
 # Bin
 release-downloader
