@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func extract(path string) error {
@@ -99,6 +100,10 @@ func extractTarGz(path string, target string) error {
 		if err != nil {
 			return err
 		}
+		if strings.Contains(header.Name, "..") {
+			log.Printf("skipping %s", header.Name)
+			continue
+		}
 
 		outPath := filepath.Join(target, header.Name)
 		switch header.Typeflag {
@@ -135,6 +140,10 @@ func extractZip(path string, target string) error {
 	defer func() { _ = rc.Close() }()
 
 	for _, f := range rc.File {
+		if strings.Contains(f.Name, "..") {
+			log.Printf("skipping %s", f.Name)
+			continue
+		}
 		if err = extractZipFile(f, target); err != nil {
 			return err
 		}
