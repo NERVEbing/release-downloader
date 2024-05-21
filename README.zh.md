@@ -51,21 +51,21 @@ go build -o release-downloader .
 
 #### 环境变量 & 命令行标志
 
-| 命令行标志            | 环境变量               | 描述                                                                | 默认值     |
-|------------------|--------------------|-------------------------------------------------------------------|---------|
-| `-repository`    | `RD_REPOSITORY`    | 以 {owner}/{repo} 格式指定 GitHub 仓库。                                  | ""      |
-| `-tag`           | `RD_TAG`           | 可选。从特定标签下载资产 (例如, regexp '.*.18.*')。                              | ""      |
-| `-filename`      | `RD_FILENAME`      | 可选。下载与特定文件名匹配的资产，排除 tarball 或 zipball (例如, '.*linux-arm64.*.gz')。 | ""      |
-| `-latest`        | `RD_LATEST`        | 可选。下载最新版本。                                                        | `false` |
-| `-prerelease`    | `RD_PRERELEASE`    | 可选。下载预发行版本。                                                       | `false` |
-| `-token`         | `RD_TOKEN`         | 可选。GitHub 个人访问令牌。                                                 | ""      |
-| `-path`          | `RD_PATH`          | 可选。下载路径。                                                          | "./tmp" |
-| `-interval`      | `RD_INTERVAL`      | 可选。下载任务之间的间隔时间。                                                   | `1h`    |
-| `-now`           | `RD_NOW`           | 可选。立即运行任务。                                                        | `false` |
-| `-timeout`       | `RD_TIMEOUT`       | 可选。HTTP 客户端超时时间。                                                  | `30s`   |
-| `-asset_tag`     | `RD_ASSET_TAG`     | 可选。使用资产标签重命名文件 (例如, xxx.zip -> xxx-v0.5.1.zip)。                   | `false` |
-| `-asset_date`    | `RD_ASSET_DATE`    | 可选。使用资产日期重命名文件 (例如, xxx.zip -> xxx-202401231619.zip)。             | `false` |
-| `-asset_extract` | `RD_ASSET_EXTRACT` | 可选。自动提取文件 (支持 zip, gz, and tar.gz)。                               | `false` |
+| 命令行标志            | 环境变量               | 描述                                                               | 默认值     |
+|------------------|--------------------|------------------------------------------------------------------|---------|
+| `-repository`    | `RD_REPOSITORY`    | 以 {owner}/{repo} 格式指定 GitHub 仓库。                                 | ""      |
+| `-tag`           | `RD_TAG`           | 可选。从特定标签下载资产 (例如，regexp '.*.18.*')。                              | ""      |
+| `-filename`      | `RD_FILENAME`      | 可选。下载与特定文件名匹配的资产，排除 tarball 或 zipball (例如，'.*linux-arm64.*.gz')。 | ""      |
+| `-latest`        | `RD_LATEST`        | 可选。下载最新版本。                                                       | `false` |
+| `-prerelease`    | `RD_PRERELEASE`    | 可选。下载预发行版本。                                                      | `false` |
+| `-token`         | `RD_TOKEN`         | 可选。GitHub 个人访问令牌。                                                | ""      |
+| `-path`          | `RD_PATH`          | 可选。下载路径。                                                         | "./tmp" |
+| `-interval`      | `RD_INTERVAL`      | 可选。下载任务之间的间隔时间。                                                  | `1h`    |
+| `-now`           | `RD_NOW`           | 可选。立即运行任务。                                                       | `false` |
+| `-timeout`       | `RD_TIMEOUT`       | 可选。HTTP 客户端超时时间。                                                 | `30s`   |
+| `-asset_tag`     | `RD_ASSET_TAG`     | 可选。使用资产标签重命名文件 (例如，xxx.zip -> xxx-v0.5.1.zip)。                   | `false` |
+| `-asset_date`    | `RD_ASSET_DATE`    | 可选。使用资产日期重命名文件 (例如，xxx.zip -> xxx-202401231619.zip)。             | `false` |
+| `-asset_extract` | `RD_ASSET_EXTRACT` | 可选。自动提取文件 (支持 zip, gz, and tar.gz)。                              | `false` |
 
 ### 许可证
 
