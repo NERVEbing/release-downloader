@@ -132,16 +132,19 @@ func run(ctx context.Context) {
 
 	releases, err := fetchReleases(ctx)
 	if err != nil {
-		log.Fatalf("failed to fetch releases: %v", err)
+		log.Printf("failed to fetch releases: %v", err)
+		return
 	}
 
 	m, err := fetchAssets(releases)
 	if err != nil {
-		log.Fatalf("failed to fetch assets: %v", err)
+		log.Printf("failed to fetch assets: %v", err)
+		return
 	}
 
 	if err = fetchFiles(m); err != nil {
-		log.Fatalf("failed to fetch files: %v", err)
+		log.Printf("failed to fetch files: %v", err)
+		return
 	}
 
 	log.Printf("task completed, duration: %s", time.Since(t))
