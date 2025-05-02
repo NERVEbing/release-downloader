@@ -5,6 +5,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/google/go-github/v62/github"
@@ -17,6 +18,7 @@ const (
 
 type config struct {
 	repository   string
+	proxy        string
 	tag          string
 	filename     string
 	latest       bool
@@ -38,6 +40,7 @@ var c *config
 
 func init() {
 	repositoryFlag := flag.String("repository", "", "GitHub repository in {owner}/{repo} format.")
+	proxyFlag := flag.String("proxy", "", "Optional. HTTP/HTTPS proxy to use for downloads (e.g., 'http://localhost:8080' or 'socks5://127.0.0.1:1080').")
 	tagFlag := flag.String("tag", "", "Optional. Download assets from a specific tag (e.g., regexp '.*.18.*').")
 	filenameFlag := flag.String("filename", "", "Optional. Download assets matching a specific filename, excluding tarball or zipball (e.g., '.*linux-arm64.*.gz').")
 	latestFlag := flag.Bool("latest", false, "Optional. Download the latest release.")
@@ -53,6 +56,7 @@ func init() {
 	flag.Parse()
 
 	repository := envOrFlag("RD_REPOSITORY", *repositoryFlag)
+	proxy := envOrFlag("RD_PROXY", *proxyFlag)
 	tag := envOrFlag("RD_TAG", *tagFlag)
 	filename := envOrFlag("RD_FILENAME", *filenameFlag)
 	latest := envOrFlag("RD_LATEST", *latestFlag)
@@ -67,16 +71,29 @@ func init() {
 	assetExtract := envOrFlag("RD_ASSET_EXTRACT", *assetExtractFlag)
 
 	httpClient := &http.Client{}
-	if timeout.Milliseconds() > 0 {
-		httpClient.Timeout = timeout
+	if proxy != "" {
+		proxy, err := url.Parse(proxy)
+		if err != nil {
+			log.Printf("invalid proxy URL: %s", proxy)
+		} else {
+			httpClient.Transport = &http.Transport{
+				Proxy: http.ProxyURL(proxy),
+			}
+		}
 	}
+
 	githubClient := github.NewClient(httpClient)
+
 	if len(token) > 0 {
 		githubClient = githubClient.WithAuthToken(token)
+	}
+	if timeout.Milliseconds() > 0 {
+		httpClient.Timeout = timeout
 	}
 
 	c = &config{
 		repository:   repository,
+		proxy:        proxy,
 		tag:          tag,
 		filename:     filename,
 		latest:       latest,
@@ -97,6 +114,7 @@ func init() {
 
 func main() {
 	log.Printf("repository: %s", c.repository)
+	log.Printf("proxy: %s", c.proxy)
 	log.Printf("tag: %s", c.tag)
 	log.Printf("filename: %s", c.filename)
 	log.Printf("latest: %t", c.latest)
@@ -118,11 +136,8 @@ func main() {
 		run(ctx)
 	}
 
-	for {
-		select {
-		case <-ticker.C:
-			run(ctx)
-		}
+	for range ticker.C {
+		run(ctx)
 	}
 }
 

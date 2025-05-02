@@ -3,21 +3,21 @@ services:
     image: ghcr.io/nervebing/release-downloader:latest
     container_name: release-downloader
     restart: always
-#    root: 1000:1000
+    # root: 1000:1000
     environment:
       TZ: Europe/London # default: Asia/Shanghai
-#      RD_REPOSITORY: containers/podman
-#      RD_TAG: .*5.0.*
-#      RD_FILENAME: .*linux_amd64.tar.gz$
-#      RD_LATEST: true
-#      RD_PRERELEASE: true
-#      RD_TOKEN: ${GITHUB_TOKEN}
-#      RD_PATH: /mnt/release-downloader
-#      RD_INTERVAL: 24h
-#      RD_NOW: true
-#      RD_TIMEOUT: 1m
-#      RD_ASSET_TAG: true
-#      RD_ASSET_DATE: true
-#      RD_ASSET_EXTRACT: true
+      # RD_REPOSITORY: containers/podman
+      # RD_TAG: .*5.0.*
+      # RD_FILENAME: .*linux_amd64.tar.gz$
+      # RD_LATEST: true
+      # RD_PRERELEASE: true
+      # RD_TOKEN: ${GITHUB_TOKEN}
+      # RD_PATH: /mnt/release-downloader
+      # RD_INTERVAL: 24h
+      # RD_NOW: true
+      # RD_TIMEOUT: 1m
+      # RD_ASSET_TAG: true
+      # RD_ASSET_DATE: true
+      # RD_ASSET_EXTRACT: true
     volumes:
       - ./data:/mnt/release-downloader

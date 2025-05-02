@@ -1,6 +1,6 @@
 module github.com/NERVEbing/release-downloader
 
-go 1.21.10
+go 1.24.2
 
 require github.com/google/go-github/v62 v62.0.0
 

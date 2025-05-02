@@ -53,8 +53,9 @@ go build -o release-downloader .
 #### Environment & Command line arguments
 
 | Command Line Flag | Environment Variable | Description                                                                                                        | Default Value |
-|-------------------|----------------------|--------------------------------------------------------------------------------------------------------------------|---------------|
+| ----------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------- |
 | `-repository`     | `RD_REPOSITORY`      | GitHub repository in {owner}/{repo} format.                                                                        | ""            |
+| `-proxy`          | `RD_PROXY`           | Optional. HTTP/SOCKS proxy to use for downloads (e.g., 'http://localhost:8080' or 'socks5://127.0.0.1:1080').      | ""            |
 | `-tag`            | `RD_TAG`             | Optional. Download assets from a specific tag (e.g., regexp '.*.18.*').                                            | ""            |
 | `-filename`       | `RD_FILENAME`        | Optional. Download assets matching a specific filename, excluding tarball or zipball (e.g., '.*linux-arm64.*.gz'). | ""            |
 | `-latest`         | `RD_LATEST`          | Optional. Download the latest release.                                                                             | `false`       |
