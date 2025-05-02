@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -16,14 +15,14 @@ func fetchReleases(ctx context.Context) ([]*github.RepositoryRelease, error) {
 
 	arr := strings.Split(c.repository, "/")
 	if len(arr) != 2 {
-		return nil, errors.New(fmt.Sprintf("invalid repository: %s", c.repository))
+		return nil, fmt.Errorf("invalid repository: %s", c.repository)
 	}
 	owner := arr[0]
 	repo := arr[1]
 
 	releases, _, err := c.githubClient.Repositories.ListReleases(ctx, owner, repo, nil)
 	if err != nil {
-		return nil, errors.New(fmt.Sprintf("list releases error: %s", err))
+		return nil, fmt.Errorf("list releases error: %s", err)
 	}
 	for _, release := range releases {
 		if !c.prerelease && release.GetPrerelease() {

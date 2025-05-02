@@ -4,7 +4,6 @@ import (
 	"archive/tar"
 	"archive/zip"
 	"compress/gzip"
-	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -119,7 +118,7 @@ func extractTarGz(path string, target string) error {
 				return err
 			}
 		default:
-			return errors.New(fmt.Sprintf("unsupported file type %v", header.Typeflag))
+			return fmt.Errorf("unsupported file type %v", header.Typeflag)
 		}
 	}
 

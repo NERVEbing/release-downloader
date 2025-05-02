@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -26,7 +25,7 @@ func download(link string, path string) error {
 	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
-		return errors.New(fmt.Sprintf("download status code %d", resp.StatusCode))
+		return fmt.Errorf("download status code %d", resp.StatusCode)
 	}
 
 	if err = fileWrite(path, resp.Body); err != nil {

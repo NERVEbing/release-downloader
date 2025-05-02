@@ -52,22 +52,23 @@ go build -o release-downloader .
 
 #### Environment & Command line arguments
 
-| Command Line Flag | Environment Variable | Description                                                                                                        | Default Value |
-| ----------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------- |
-| `-repository`     | `RD_REPOSITORY`      | GitHub repository in {owner}/{repo} format.                                                                        | ""            |
-| `-proxy`          | `RD_PROXY`           | Optional. HTTP/SOCKS proxy to use for downloads (e.g., 'http://localhost:8080' or 'socks5://127.0.0.1:1080').      | ""            |
-| `-tag`            | `RD_TAG`             | Optional. Download assets from a specific tag (e.g., regexp '.*.18.*').                                            | ""            |
-| `-filename`       | `RD_FILENAME`        | Optional. Download assets matching a specific filename, excluding tarball or zipball (e.g., '.*linux-arm64.*.gz'). | ""            |
-| `-latest`         | `RD_LATEST`          | Optional. Download the latest release.                                                                             | `false`       |
-| `-prerelease`     | `RD_PRERELEASE`      | Optional. Download prerelease versions.                                                                            | `false`       |
-| `-token`          | `RD_TOKEN`           | Optional. GitHub personal access token.                                                                            | ""            |
-| `-path`           | `RD_PATH`            | Optional. Download path.                                                                                           | "./tmp"       |
-| `-interval`       | `RD_INTERVAL`        | Optional. Interval between download tasks.                                                                         | `1h`          |
-| `-now`            | `RD_NOW`             | Optional. Run the task immediately.                                                                                | `false`       |
-| `-timeout`        | `RD_TIMEOUT`         | Optional. HTTP client timeout duration.                                                                            | `30s`         |
-| `-asset_tag`      | `RD_ASSET_TAG`       | Optional. Rename the file using the asset tag (e.g., xxx.zip -> xxx-v0.5.1.zip).                                   | `false`       |
-| `-asset_date`     | `RD_ASSET_DATE`      | Optional. Rename the file using the asset date (e.g., xxx.zip -> xxx-202401231619.zip).                            | `false`       |
-| `-asset_extract`  | `RD_ASSET_EXTRACT`   | Optional. Automatically extract files (supports zip, gz, and tar.gz).                                              | `false`       |
+### English Version
+| Command Line Flag | Environment Variable | Default Value     | Description                                                                                  |
+| ----------------- | -------------------- | ----------------- | -------------------------------------------------------------------------------------------- |
+| `-repository`     | `RD_REPOSITORY`      | `""`              | GitHub repository in format `owner/repo`.                                                    |
+| `-proxy`          | `RD_PROXY`           | `""`              | HTTP/HTTPS proxy for downloads (e.g., `http://localhost:8080` or `socks5://127.0.0.1:1080`). |
+| `-tag`            | `RD_TAG`             | `""`              | Download assets matching a specific tag (supports regex, e.g., `.*.18.*`).                   |
+| `-filename`       | `RD_FILENAME`        | `""`              | Filter assets by filename (regex supported, e.g., `.*linux-arm64.*.gz`).                     |
+| `-latest`         | `RD_LATEST`          | `false`           | Fetch the latest release (ignores `tag` if set).                                             |
+| `-prerelease`     | `RD_PRERELEASE`      | `false`           | Include prerelease versions.                                                                 |
+| `-token`          | `RD_TOKEN`           | `""`              | GitHub personal access token (for private repos or higher rate limits).                      |
+| `-path`           | `RD_PATH`            | `"./tmp"`         | Directory to save downloaded files.                                                          |
+| `-interval`       | `RD_INTERVAL`        | `DefaultInterval` | Delay between download tasks (e.g., `30s`, `5m`).                                            |
+| `-now`            | `RD_NOW`             | `false`           | Run immediately without waiting for the first interval.                                      |
+| `-timeout`        | `RD_TIMEOUT`         | `DefaultTimeout`  | HTTP client timeout (e.g., `30s`, `2m`).                                                     |
+| `-asset_tag`      | `RD_ASSET_TAG`       | `false`           | Append release tag to filename (e.g., `file.zip` → `file-v1.0.0.zip`).                       |
+| `-asset_date`     | `RD_ASSET_DATE`      | `false`           | Append download date to filename (e.g., `file.zip` → `file-20240502.zip`).                   |
+| `-asset_extract`  | `RD_ASSET_EXTRACT`   | `false`           | Auto-extract downloaded files (supports `.zip`, `.gz`, `.tar.gz`).                           |
 
 ### License
 
