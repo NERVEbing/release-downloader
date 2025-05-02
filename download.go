@@ -18,7 +18,7 @@ func download(link string, path string) error {
 
 	log.Printf("downloading %s", link)
 
-	resp, err := http.Get(link)
+	resp, err := c.httpClient.Get(link)
 	if err != nil {
 		return err
 	}
