@@ -27,6 +27,7 @@ type config struct {
 	path         string
 	interval     time.Duration
 	now          bool
+	once         bool
 	timeout      time.Duration
 	assetTag     bool
 	assetDate    bool
@@ -49,6 +50,7 @@ func init() {
 	pathFlag := flag.String("path", "./tmp", "Optional. Directory to save downloaded files (default: `./tmp`).")
 	intervalFlag := flag.Duration("interval", DefaultInterval, "Optional. Delay between download tasks (e.g., `30s`, `5m`).")
 	nowFlag := flag.Bool("now", false, "Optional. Run immediately without waiting for the first interval.")
+	onceFlag := flag.Bool("once", false, "Optional. Run once and exit.")
 	timeoutFlag := flag.Duration("timeout", DefaultTimeout, "Optional. HTTP client timeout (e.g., `30s`, `2m`).")
 	assetTagFlag := flag.Bool("asset_tag", false, "Optional. Append release tag to filename (e.g., `file.zip` → `file-v1.0.0.zip`).")
 	assetDateFlag := flag.Bool("asset_date", false, "Optional. Append download date to filename (e.g., `file.zip` → `file-20240502.zip`).")
@@ -66,6 +68,7 @@ func init() {
 	path := envOrFlag("RD_PATH", *pathFlag)
 	interval := envOrFlag("RD_INTERVAL", *intervalFlag)
 	now := envOrFlag("RD_NOW", *nowFlag)
+	once := envOrFlag("RD_ONCE", *onceFlag)
 	timeout := envOrFlag("RD_TIMEOUT", *timeoutFlag)
 	assetTag := envOrFlag("RD_ASSET_TAG", *assetTagFlag)
 	assetDate := envOrFlag("RD_ASSET_DATE", *assetDateFlag)
@@ -103,6 +106,7 @@ func init() {
 		path:         path,
 		interval:     interval,
 		now:          now,
+		once:         once,
 		timeout:      timeout,
 		assetTag:     assetTag,
 		assetDate:    assetDate,
@@ -124,6 +128,7 @@ func main() {
 	log.Printf("path: %s", c.path)
 	log.Printf("interval: %s", c.interval.String())
 	log.Printf("now: %t", c.now)
+	log.Printf("once: %t", c.once)
 	log.Printf("timeout: %s", c.timeout.String())
 	log.Printf("asset_tag: %t", c.assetTag)
 	log.Printf("asset_date: %t", c.assetDate)
@@ -135,16 +140,22 @@ func main() {
 
 	if c.now {
 		run(ctx)
+		if c.once {
+			return
+		}
 	}
 
 	for range ticker.C {
 		run(ctx)
+		if c.once {
+			return
+		}
 	}
 }
 
 func run(ctx context.Context) {
 	t := time.Now()
-	log.Printf("task commencing")
+	log.Printf("task started")
 
 	releases, err := fetchReleases(ctx)
 	if err != nil {
@@ -163,5 +174,5 @@ func run(ctx context.Context) {
 		return
 	}
 
-	log.Printf("task completed, duration: %s", time.Since(t))
+	log.Printf("task finished, duration: %s", time.Since(t))
 }

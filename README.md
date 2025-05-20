@@ -65,6 +65,7 @@ go build -o release-downloader .
 | `-path`           | `RD_PATH`            | `"./tmp"`         | Directory to save downloaded files.                                                          |
 | `-interval`       | `RD_INTERVAL`        | `DefaultInterval` | Delay between download tasks (e.g., `30s`, `5m`).                                            |
 | `-now`            | `RD_NOW`             | `false`           | Run immediately without waiting for the first interval.                                      |
+| `-once`           | `RD_ONCE`            | `false`           | Run once and exit.                                                                           |
 | `-timeout`        | `RD_TIMEOUT`         | `DefaultTimeout`  | HTTP client timeout (e.g., `30s`, `2m`).                                                     |
 | `-asset_tag`      | `RD_ASSET_TAG`       | `false`           | Append release tag to filename (e.g., `file.zip` → `file-v1.0.0.zip`).                       |
 | `-asset_date`     | `RD_ASSET_DATE`      | `false`           | Append download date to filename (e.g., `file.zip` → `file-20240502.zip`).                   |

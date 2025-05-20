@@ -63,6 +63,7 @@ go build -o release-downloader .
 | `-path`          | `RD_PATH`          | `"./tmp"`         | 文件下载保存目录。                                                                        |
 | `-interval`      | `RD_INTERVAL`      | `DefaultInterval` | 下载任务间隔时间（如 `30s`、`5m`）。                                                      |
 | `-now`           | `RD_NOW`           | `false`           | 立即执行，不等待首次间隔。                                                                |
+| `-once`          | `RD_ONCE`          | `false`           | 运行一次后退出。                                                                          |
 | `-timeout`       | `RD_TIMEOUT`       | `DefaultTimeout`  | HTTP 客户端超时时间（如 `30s`、`2m`）。                                                   |
 | `-asset_tag`     | `RD_ASSET_TAG`     | `false`           | 在文件名后追加版本标签（如 `file.zip` → `file-v1.0.0.zip`）。                             |
 | `-asset_date`    | `RD_ASSET_DATE`    | `false`           | 在文件名后追加下载日期（如 `file.zip` → `file-20240502.zip`）。                           |
