@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func extract(path string) error {
+func extract(path string) (string, error) {
 	name, ext := fileNameAndExt(path)
 	target := name
 
@@ -25,16 +25,16 @@ func extract(path string) error {
 		target += "-" + "zip"
 	default:
 		log.Printf("unsupported file extension: %s, skip extract", ext)
-		return nil
+		return "", nil
 	}
 
 	exist, err := isExistDir(target)
 	if err != nil {
-		return err
+		return "", err
 	}
 	if exist {
 		log.Printf("dir %s already exists, skip extract", target)
-		return nil
+		return target, nil
 	}
 
 	log.Printf("extracting %s to %s", path, target)
@@ -49,12 +49,12 @@ func extract(path string) error {
 	}
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	log.Printf("extraction succeeded: %s", path)
 
-	return nil
+	return target, nil
 }
 
 func extractGz(path string, target string) error {

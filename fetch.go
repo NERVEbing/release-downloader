@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 
 	"github.com/google/go-github/v62/github"
@@ -97,6 +96,7 @@ func fetchFiles(m map[string][]*github.ReleaseAsset) error {
 	}
 
 	var downloadedFiles []string
+	var downloadedExtractFiles []string
 	for tag := range m {
 		for _, asset := range m[tag] {
 			assetName := asset.GetName()
@@ -112,59 +112,68 @@ func fetchFiles(m map[string][]*github.ReleaseAsset) error {
 			if err := download(assetURL, assetPath); err != nil {
 				return err
 			}
+			downloadedFiles = append(downloadedFiles, assetPath)
+
 			if c.assetExtract {
-				if err := extract(assetPath); err != nil {
+				extractPath, err := extract(assetPath)
+				if err != nil {
 					return err
 				}
+				if extractPath != "" {
+					downloadedExtractFiles = append(downloadedExtractFiles, extractPath)
+				}
 			}
-			downloadedFiles = append(downloadedFiles, assetPath)
 		}
 	}
 
 	if c.autoclean {
-		if err := cleanOldFiles(c.path, downloadedFiles, c.filename); err != nil {
-			log.Printf("failed to clean old releases: %v", err)
+		if err := cleanOldEntries(downloadedFiles, false); err != nil {
+			log.Printf("failed to clean old release files: %v", err)
+		}
+		if err := cleanOldEntries(downloadedExtractFiles, true); err != nil {
+			log.Printf("failed to clean old extracted directories: %v", err)
 		}
 	}
 
 	return nil
 }
 
-func cleanOldFiles(downloadPath string, newFiles []string, filenameRegex string) error {
-	if filenameRegex == "" {
-		return nil
-	}
-	re, err := regexp.Compile(filenameRegex)
-	if err != nil {
-		return fmt.Errorf("invalid filename regex for cleaning: %w", err)
+func cleanOldEntries(newEntries []string, isDir bool) error {
+	newEntriesSet := make(map[string]struct{}, len(newEntries))
+	for _, f := range newEntries {
+		newEntriesSet[f] = struct{}{}
 	}
 
-	newFilesSet := make(map[string]struct{}, len(newFiles))
-	for _, f := range newFiles {
-		newFilesSet[f] = struct{}{}
-	}
-
-	files, err := os.ReadDir(downloadPath)
+	entries, err := os.ReadDir(c.path)
 	if err != nil {
 		return err
 	}
 
-	for _, file := range files {
-		if file.IsDir() {
+	entryType := "file"
+	if isDir {
+		entryType = "directory"
+	}
+
+	for _, entry := range entries {
+		if entry.IsDir() != isDir {
 			continue
 		}
 
-		filePath := filepath.Join(downloadPath, file.Name())
+		entryPath := filepath.Join(c.path, entry.Name())
 
-		if _, isNew := newFilesSet[filePath]; isNew {
+		if _, isNew := newEntriesSet[entryPath]; isNew {
 			continue
 		}
 
-		if re.MatchString(file.Name()) {
-			log.Printf("removing old release file: %s", filePath)
-			if err := os.Remove(filePath); err != nil {
-				log.Printf("failed to remove old release file %s: %v", filePath, err)
-			}
+		log.Printf("removing old release %s: %s", entryType, entryPath)
+		var removeErr error
+		if isDir {
+			removeErr = os.RemoveAll(entryPath)
+		} else {
+			removeErr = os.Remove(entryPath)
+		}
+		if removeErr != nil {
+			log.Printf("failed to remove old release %s %s: %v", entryType, entryPath, removeErr)
 		}
 	}
 
