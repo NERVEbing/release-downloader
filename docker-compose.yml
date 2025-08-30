@@ -19,5 +19,6 @@ services:
       # RD_ASSET_TAG: true
       # RD_ASSET_DATE: true
       # RD_ASSET_EXTRACT: true
+      # RD_AUTOCLEAN: true
     volumes:
       - ./data:/mnt/release-downloader

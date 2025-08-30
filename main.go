@@ -32,6 +32,7 @@ type config struct {
 	assetTag     bool
 	assetDate    bool
 	assetExtract bool
+	autoclean    bool
 
 	httpClient   *http.Client
 	githubClient *github.Client
@@ -55,6 +56,7 @@ func init() {
 	assetTagFlag := flag.Bool("asset_tag", false, "Optional. Append release tag to filename (e.g., `file.zip` → `file-v1.0.0.zip`).")
 	assetDateFlag := flag.Bool("asset_date", false, "Optional. Append download date to filename (e.g., `file.zip` → `file-20240502.zip`).")
 	assetExtractFlag := flag.Bool("asset_extract", false, "Optional. Auto-extract downloaded files (supports `.zip`, `.gz`, `.tar.gz`).")
+	autocleanFlag := flag.Bool("autoclean", false, "Optional. Remove old release files after downloading a new one.")
 
 	flag.Parse()
 
@@ -73,6 +75,7 @@ func init() {
 	assetTag := envOrFlag("RD_ASSET_TAG", *assetTagFlag)
 	assetDate := envOrFlag("RD_ASSET_DATE", *assetDateFlag)
 	assetExtract := envOrFlag("RD_ASSET_EXTRACT", *assetExtractFlag)
+	autoclean := envOrFlag("RD_AUTOCLEAN", *autocleanFlag)
 
 	httpClient := &http.Client{}
 	if proxy != "" {
@@ -111,6 +114,7 @@ func init() {
 		assetTag:     assetTag,
 		assetDate:    assetDate,
 		assetExtract: assetExtract,
+		autoclean:    autoclean,
 
 		httpClient:   httpClient,
 		githubClient: githubClient,
@@ -133,6 +137,7 @@ func main() {
 	log.Printf("asset_tag: %t", c.assetTag)
 	log.Printf("asset_date: %t", c.assetDate)
 	log.Printf("asset_extract: %t", c.assetExtract)
+	log.Printf("autoclean: %t", c.autoclean)
 
 	ctx := context.Background()
 	ticker := time.NewTicker(c.interval)

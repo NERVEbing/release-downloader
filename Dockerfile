@@ -1,4 +1,4 @@
-FROM golang:1.24.2 AS builder
+FROM golang:1.25.0 AS builder
 
 COPY . /app
 
@@ -9,7 +9,7 @@ ENV GO111MODULE=on \
 
 RUN mkdir -p ./bin && go build -o ./bin ./...
 
-FROM alpine:3.21.3
+FROM alpine:3.22.1
 
 RUN apk update && apk --no-cache add tzdata
 

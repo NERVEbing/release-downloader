@@ -68,6 +68,7 @@ go build -o release-downloader .
 | `-asset_tag`     | `RD_ASSET_TAG`     | `false`           | 在文件名后追加版本标签（如 `file.zip` → `file-v1.0.0.zip`）。                             |
 | `-asset_date`    | `RD_ASSET_DATE`    | `false`           | 在文件名后追加下载日期（如 `file.zip` → `file-20240502.zip`）。                           |
 | `-asset_extract` | `RD_ASSET_EXTRACT` | `false`           | 自动解压下载的文件（支持 `.zip`、`.gz`、`.tar.gz`）。                                     |
+| `-autoclean`     | `RD_AUTOCLEAN`     | `false`           | 下载新版本文件后，自动清理旧的 release 文件。                                             |
 
 ### 许可证
 

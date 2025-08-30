@@ -70,6 +70,7 @@ go build -o release-downloader .
 | `-asset_tag`      | `RD_ASSET_TAG`       | `false`           | Append release tag to filename (e.g., `file.zip` → `file-v1.0.0.zip`).                       |
 | `-asset_date`     | `RD_ASSET_DATE`      | `false`           | Append download date to filename (e.g., `file.zip` → `file-20240502.zip`).                   |
 | `-asset_extract`  | `RD_ASSET_EXTRACT`   | `false`           | Auto-extract downloaded files (supports `.zip`, `.gz`, `.tar.gz`).                           |
+| `-autoclean`      | `RD_AUTOCLEAN`       | `false`           | Remove old release files after downloading a new one.                                        |
 
 ### License
 
