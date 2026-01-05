@@ -104,7 +104,10 @@ func fetchFiles(m map[string][]*github.ReleaseAsset) error {
 				assetName = fileRename(assetName, tag)
 			}
 			if c.assetDate {
-				assetName = fileRename(assetName, asset.UpdatedAt.Format("200601021504"))
+				updatedAt := asset.GetUpdatedAt()
+				if !updatedAt.IsZero() {
+					assetName = fileRename(assetName, updatedAt.Format("200601021504"))
+				}
 			}
 			assetURL := asset.GetBrowserDownloadURL()
 			assetPath := filepath.Join(c.path, assetName)
