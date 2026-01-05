@@ -10,7 +10,7 @@
 ### Overview
 
 release-downloader is an elegantly practical application designed to periodically monitor specified GitHub repositories
-for releases and download corresponding files according to predefined criteria. It is primarily used to automate the
+for releases and downloads corresponding files according to predefined criteria. It is primarily used to automate the
 acquisition of the latest software release versions.
 
 ### Features
